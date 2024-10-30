@@ -4,7 +4,7 @@
 
 do
 {
-    Console.WriteLine("Enter a word to be translated: ");
+    Console.Write("Enter a word/words to be translated: ");
     string userWord = Console.ReadLine().Trim();
     userWord = userWord.ToLower();
 
@@ -16,19 +16,51 @@ do
         string translateSentence = "";
         foreach (string word in words)
         {
-            translateSentence += Translate(word) + " ";
+            if (HasNumbers(word) || HasSynbols(word))
+            {
+                Console.WriteLine("We are not translating number or symbols.");
+                translateSentence += word + " ";
+            }
+            else
+            {
+                translateSentence += Translate(word) + " ";
+            }
         }
+            
         Console.Write($"This is translated Piglatin: {translateSentence}");
     }
     else
     {
-        Console.WriteLine("You have entered anything, so nothing to translate");
+        Console.WriteLine("You have not entered anything, so nothing to translate");
     }
 
 } while (GetPlayAgainAnswer() == true);
 
+static bool HasNumbers(string userInput)
+{
+    // using foreach to iterate string array (strings are just character arrays)
+    foreach (char stringChar in userInput)
+    {
+        if (char.IsDigit(stringChar))
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
-
+static bool HasSynbols(string userInputSymbols)
+{
+    char[] symbols = { '@', '.', ',', '*', '%', '#' };
+    foreach (char symbolChar in userInputSymbols)
+    {
+        if(symbols.Contains(symbolChar))
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
 static bool IsVowel(char c)
 {
@@ -64,7 +96,7 @@ static string Translate(string input)
     //Console.WriteLine($"Index of First Vowel: {firstVowelIndex}");
 
     string translated = "";
-    if(firstVowelIndex == 0)
+    if (firstVowelIndex == 0)
     {
         // i.e the word is started with a vowel
         translated = input + "way";
@@ -96,7 +128,7 @@ static bool GetPlayAgainAnswer()
     }
     else
     {
-        Console.WriteLine("YEAH LETS PLAY");
+        Console.WriteLine("YEAH LETS PLAY AGAIN!");
         //continue;
         return true;
     }
